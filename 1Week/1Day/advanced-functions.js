@@ -18,7 +18,4 @@ console.log(doMath(10, 100, 99, (x,y,z)=>{// our anonymous function
 }));
 
 console.log(doMath(10,5,6, sub));
-
-
 //get user data function (process user data function)
-

@@ -10,6 +10,3 @@ console.log(doMath(10, 10));
 let thisCoolFunction = doMath
 
 console.log(thisCoolFunction(10,10));
-
-
-
