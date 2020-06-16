@@ -8,20 +8,24 @@
 // 0   1   1   2   3   5   8
 
 //We'll come back after we learn about objects
-
-let fib = (n) => {
-
-    if (n === 1) {
-        return 0
-    }
-    if (n === 2) {
-        return 1
-    }
-
-    return fib(n - 1) + fib(n - 2)
+let memo = {//using an object as a dictionary not as an object like normal
+    1:0,
+    2:1,
 }
 
-console.log(fib(100));//Stack Overflow
+
+let fib = (n) => {
+    
+    if(memo[n] || memo[n] === 0){
+        return memo[n]
+    }
+    else{
+        memo[n] = fib(n - 1) + fib(n - 2)
+        return memo[n]
+    }
+}
+
+console.log(fib(1000));//Stack Overflow
 
 
 //fib 100
