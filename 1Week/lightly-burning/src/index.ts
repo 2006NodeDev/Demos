@@ -4,12 +4,44 @@ import { Book } from './models/Book'
 const app = express()//we call the express function
 //we get a completed application
 
+// app .use matches every single http verb( get, post and delete and )
+// if I don't specify a path, thats the same as every path ( '/' )
+app.use(express.json())//this is an example of middle ware
+// the idea of middle ware is to run requests through partial processing and let them move forward through our application
+//express.json is a function that takes in the request - turns the body into a js object - and then we let the request go to the next function that it matches
+
+
 
 app.get('/books', (req:Request, res:Response)=>{
+    // .json sends the objects in Json notation
     res.json(books)
 })
 
-
+// for saving a new book
+app.post('/books', (req:Request, res:Response)=>{
+    console.log(req.body);//lets look at what the request body looks like
+    let {bookId, 
+        genre, 
+        authors,
+        publishingDate,
+        publisher,
+        pages,
+        chapters,
+        title,
+        series,
+        numberInSeries,
+        ISBN       } = req.body //this is destructuring
+        // warning if data is allowed to be null or 0, this check is not sufficient
+        if(bookId && genre && authors && publishingDate && publisher && pages && chapters && title && ISBN && series && numberInSeries){
+            books.push({bookId,genre,authors,publisher,publishingDate,pages,chapters,title,series,numberInSeries,ISBN})
+            //sendStatus just sents an empty response with the status code provided
+            res.sendStatus(201)//201 is created
+        }else {
+            // .status sets the status code but deson't send res
+            // .send can send a response in many different content-types
+            res.status(400).send("Please Fill Out All Fields")
+        }
+})
 
 
 // this will get in the way because it matches every single request
