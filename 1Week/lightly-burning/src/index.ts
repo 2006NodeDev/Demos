@@ -32,7 +32,7 @@ app.post('/books', (req:Request, res:Response)=>{
         numberInSeries,
         ISBN       } = req.body //this is destructuring
         // warning if data is allowed to be null or 0, this check is not sufficient
-        if(bookId && genre && authors && publishingDate && publisher && pages && chapters && title && ISBN && series && numberInSeries){
+        if(bookId && genre && authors && publishingDate && publisher && pages && chapters && title && ISBN && (!series && typeof(series) === 'boolean' || series) && numberInSeries){
             books.push({bookId,genre,authors,publisher,publishingDate,pages,chapters,title,series,numberInSeries,ISBN})
             //sendStatus just sents an empty response with the status code provided
             res.sendStatus(201)//201 is created
