@@ -1,5 +1,6 @@
 import express from 'express'
 import { bookRouter } from './routers/book-router'
+import { loggingMiddleware } from './middleware/logging-middleware'
 
 const app = express()//we call the express function
 //we get a completed application
@@ -9,6 +10,9 @@ const app = express()//we call the express function
 app.use(express.json())//this is an example of middle ware
 // the idea of middle ware is to run requests through partial processing and let them move forward through our application
 //express.json is a function that takes in the request - turns the body into a js object - and then we let the request go to the next function that it matches
+
+//our custom middleware that we ant to run on all requests
+app.use(loggingMiddleware)// we use use to match everything, no path to match all paths
 
 app.use('/books', bookRouter)// redirect all requests on /books to the router
 
