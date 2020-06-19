@@ -1,8 +1,11 @@
-import express from 'express'
+import express, { Request, Response } from 'express'
 import { bookRouter } from './routers/book-router'
 import { loggingMiddleware } from './middleware/logging-middleware'
-import { userRouter } from './routers/user-router'
+import { userRouter, users } from './routers/user-router'
 import { sessionMiddleware } from './middleware/session-middleware'
+import { BadCredentialsError } from './errors/BadCredentialsError'
+import { AuthFailureError } from './errors/AuthFailureError'
+
 
 const app = express()//we call the express function
 //we get a completed application
@@ -18,10 +21,41 @@ app.use(loggingMiddleware)// we use use to match everything, no path to match al
 //middleware for tracking connections to our server
 app.use(sessionMiddleware)
 
-
+//app.use(authenticationMiddleware) this makes us unable to login oops!
 
 app.use('/books', bookRouter)// redirect all requests on /books to the router
 app.use('/users', userRouter)// redirect all requests on /users to the router
+
+
+// an endpoint that unathenticated users can send credentials to to recieve authentication
+app.post('/login', (req:Request, res:Response)=>{
+    // you could use destructuring, see ./routers/book-router
+    let username = req.body.username
+    let password = req.body.password
+    // if I didn't get a usrname/password send an error and say give me both fields
+    if(!username || !password){
+        // make a custom http error and throw it or just send a res
+        throw new BadCredentialsError()
+    } else {
+        let found = false
+        for(const user of users) {
+            if(user.username === username && user.password === password){
+                // if they gave me credntials appropriately, add their information to their unique session, so I know who they are
+                req.session.user = user
+                //after someone logs in you should send them their user info, standard practice for websites
+                res.json(user)
+                found = true
+            }
+        }
+        if(!found){
+            throw new AuthFailureError()
+        }
+    }
+})
+
+
+
+
 
 // the error handler we wrote that express redirects top level errors to
 app.use((err, req, res, next) => {

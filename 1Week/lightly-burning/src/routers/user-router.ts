@@ -1,17 +1,22 @@
 import express, { Request, Response, NextFunction } from 'express'
 import { User } from '../models/User'
+import { authenticationMiddleware } from '../middleware/authentication-middleware'
+import { authorizationMiddleware } from '../middleware/authorization-middleware'
 // our base path is /users
 export const userRouter = express.Router()
 
+// this applies this middleware to the entire router beneath it
+userRouter.use(authenticationMiddleware)
+
 
 // Get all
-userRouter.get('/', (req:Request,res:Response,next:NextFunction)=>{
+userRouter.get('/', authorizationMiddleware(['Admin']), (req:Request,res:Response,next:NextFunction)=>{
     res.json(users)
 })
 
 
 //get by id
-userRouter.get('/:id', (req:Request, res:Response)=>{
+userRouter.get('/:id', authorizationMiddleware(['Admin', 'Manager']), (req:Request, res:Response)=>{
     let {id} = req.params
     if(isNaN(+id)){
         // send a response telling them they need to give us a number
@@ -38,7 +43,7 @@ userRouter.get('/:id', (req:Request, res:Response)=>{
 
 
 //fake data
-let users:User[] = [
+export let users:User[] = [
     {
         userId:1,
         username:'ILoveBooks',

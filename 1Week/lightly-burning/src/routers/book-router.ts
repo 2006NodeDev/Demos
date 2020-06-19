@@ -3,6 +3,8 @@ import { BookUserInputError } from '../errors/BookUserInputError'
 import { BookIdInputError } from '../errors/BookIdInputError'
 import { BookNotFoundError } from '../errors/BookNotFoundError'
 import { Book } from '../models/Book'
+import { authenticationMiddleware } from '../middleware/authentication-middleware'
+import { loggingMiddleware } from '../middleware/logging-middleware'
 
 // is like a sub division of the application itself
 export let bookRouter = express.Router()
@@ -14,7 +16,8 @@ bookRouter.get('/', (req: Request, res: Response) => {
 })
 
 // for saving a new book
-bookRouter.post('/', (req: Request, res: Response) => {
+// this endpoint will run all the middleware functions one at a time
+bookRouter.post('/', loggingMiddleware, authenticationMiddleware, (req: Request, res: Response) => {
     console.log(req.body);//lets look at what the request body looks like
     let { bookId,
         genre,
