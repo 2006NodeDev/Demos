@@ -1,6 +1,8 @@
 import express from 'express'
 import { bookRouter } from './routers/book-router'
 import { loggingMiddleware } from './middleware/logging-middleware'
+import { userRouter } from './routers/user-router'
+import { sessionMiddleware } from './middleware/session-middleware'
 
 const app = express()//we call the express function
 //we get a completed application
@@ -13,9 +15,13 @@ app.use(express.json())//this is an example of middle ware
 
 //our custom middleware that we ant to run on all requests
 app.use(loggingMiddleware)// we use use to match everything, no path to match all paths
+//middleware for tracking connections to our server
+app.use(sessionMiddleware)
+
+
 
 app.use('/books', bookRouter)// redirect all requests on /books to the router
-
+app.use('/users', userRouter)// redirect all requests on /users to the router
 
 // the error handler we wrote that express redirects top level errors to
 app.use((err, req, res, next) => {
