@@ -1,6 +1,23 @@
 create schema lightlyburning;
 set schema 'lightlyburning';
 
+
+
+-- run the entire script to regenerate the ddl
+
+drop table users;
+drop table roles;
+drop table books_authors;
+drop table books_genre;
+drop table authors;
+drop table genre;
+drop table books;
+
+
+
+
+
+
 create table roles(
 	"role_id" serial primary key,
 	"role" text
@@ -34,8 +51,7 @@ create table books (
 	"ISBN" int not null
 );
 
-insert into books ("title","pages","chapters","publisher","publishing_date","series","number_in_series","ISBN")
-values('Harry Potter', '100', '10', 'Bloomsbury (UK)', '1997-07-01 00:00:00', true, 1, 120398123);
+
 
 select * from books;
 
@@ -44,16 +60,14 @@ create table genre(
 	"genre" text not null unique
 );
 
-insert into genre ("genre")
-	values ('Fantasy');
+
 
 create table authors(
 	"author_id" serial primary key,
 	"author" text not null unique
 );
 
-insert into authors ("author")
-	values ('J.K.Rowling');
+
 
 create table books_authors(
 	"book_id" int references books ("book_id"),
@@ -61,7 +75,7 @@ create table books_authors(
 	primary key ("book_id", "author_id")
 );
 
-insert into books_authors values (1,1);
+
 
 create table books_genre(
 	"book_id" int references books ("book_id"),
@@ -69,7 +83,7 @@ create table books_genre(
 	primary key ("book_id", "genre_id")
 );
 
-insert into books_genre values (1,1);
+
 
 
 select * from books b natural join books_authors ba natural join authors a;
