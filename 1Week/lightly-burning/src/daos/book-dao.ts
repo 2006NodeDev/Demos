@@ -7,22 +7,29 @@ import { connectionPool } from ".";
 /*
     takes in no inputs 
     output of every book from the database
+    data should be output in the form of a Book[]
 */
 //if we swap to different database like oracle, or maybe even a nosql database
 //so long as this function continues to return all of the books
 //we don't have to chnage any other code in the program
-export async function getAllBooks(){
-    let client:PoolClient;// this will be the "connection" we borrow from the pool but 
+export async function getAllBooks() {
+    let client: PoolClient;// this will be the "connection" we borrow from the pool but 
     //that process can take some time and can fail so we declare the var ahead of time
-    try{
+    try {
         client = await connectionPool.connect()
-        let results:QueryResult = await client.query(`select * from lightlyburning.books;`)
+        let results: QueryResult = await client.query(`select b.book_id, b."pages", b.chapters, b."ISBN" ,b.series , b.number_in_series , b.publisher , b.publishing_date , b.title, array_agg(distinct (a.author)) as authors, array_agg(distinct (g.genre)) as genres 
+                                                    from lightlyburning.books b 
+                                                    natural join lightlyburning.books_authors ba 
+                                                    natural join lightlyburning.authors a
+                                                    natural join lightlyburning.books_genre bg
+                                                    natural join lightlyburning.genre g
+                                                    group by b.book_id;`)
         return results.rows
-    } catch(e){
+    } catch (e) {
         //we should do some sort of error processing in this catch statement
         console.log(e)
         throw new Error('un-implemented error handling')
-    }finally{
+    } finally {
         // we make sure client isn't undefined
         client && client.release()//then we release it
     }
