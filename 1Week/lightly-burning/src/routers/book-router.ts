@@ -5,14 +5,18 @@ import { BookNotFoundError } from '../errors/BookNotFoundError'
 import { Book } from '../models/Book'
 import { authenticationMiddleware } from '../middleware/authentication-middleware'
 import { loggingMiddleware } from '../middleware/logging-middleware'
+import { getAllBooks } from '../daos/book-dao'
 
 // is like a sub division of the application itself
 export let bookRouter = express.Router()
 // the router already has the path /books so we assume that every endpoint inside of the router already match /books
 
-bookRouter.get('/', (req: Request, res: Response) => {
+bookRouter.get('/', async (req: Request, res: Response) => {
     // .json sends the objects in Json notation
+    //literally just said you always need a try catch around a promise
+    let books = await getAllBooks()
     res.json(books)
+
 })
 
 // for saving a new book
