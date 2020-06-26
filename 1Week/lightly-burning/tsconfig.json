@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-      "types": ["node"],
+      "types": ["node", "jest"],
       "outDir": "build/dist",
       "module": "commonjs",
       "target": "es5",
@@ -16,7 +16,9 @@
       "strictNullChecks": false,
       "suppressImplicitAnyIndexErrors": true,
       "noUnusedLocals": true,
-      "esModuleInterop": true
+      "esModuleInterop": true,
+      "baseUrl": ".",
+      
     },
     "exclude": [
       "node_modules",
@@ -25,8 +27,6 @@
       "styleguide.config.js",
       "docs",
       "acceptance-tests",
-      "webpack",
-      "jest",
-      "src/**/*.test.ts"
+      "webpack"
     ]
   }
