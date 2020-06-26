@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from "express";
+import {  Response, NextFunction } from "express";
 
 
-export function authenticationMiddleware(req:Request, res:Response, next:NextFunction){
+export function authenticationMiddleware(req:any, res:Response, next:NextFunction){
     if(!req.session.user) {
         res.status(401).send('Please Login')// this could be an error as well
     } else{
