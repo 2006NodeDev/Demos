@@ -1,10 +1,10 @@
-import express, { Request, Response } from 'express'
+import express, { Request, Response, NextFunction } from 'express'
 import { bookRouter } from './routers/book-router'
 import { loggingMiddleware } from './middleware/logging-middleware'
-import { userRouter, users } from './routers/user-router'
+import { userRouter } from './routers/user-router'
 import { sessionMiddleware } from './middleware/session-middleware'
 import { BadCredentialsError } from './errors/BadCredentialsError'
-import { AuthFailureError } from './errors/AuthFailureError'
+import { getUserByUsernameAndPassword } from './daos/user-dao'
 
 
 const app = express()//we call the express function
@@ -28,7 +28,7 @@ app.use('/users', userRouter)// redirect all requests on /users to the router
 
 
 // an endpoint that unathenticated users can send credentials to to recieve authentication
-app.post('/login', (req:Request, res:Response)=>{
+app.post('/login', async (req:Request, res:Response, next:NextFunction)=>{
     // you could use destructuring, see ./routers/book-router
     let username = req.body.username
     let password = req.body.password
@@ -37,18 +37,13 @@ app.post('/login', (req:Request, res:Response)=>{
         // make a custom http error and throw it or just send a res
         throw new BadCredentialsError()
     } else {
-        let found = false
-        for(const user of users) {
-            if(user.username === username && user.password === password){
-                // if they gave me credntials appropriately, add their information to their unique session, so I know who they are
-                req.session.user = user
-                //after someone logs in you should send them their user info, standard practice for websites
-                res.json(user)
-                found = true
-            }
-        }
-        if(!found){
-            throw new AuthFailureError()
+        try{
+            let user = await getUserByUsernameAndPassword(username, password)
+            req.session.user = user// need to remeber to add their user data to the session
+            // so we can use that data in other requests
+            res.json(user)
+        }catch(e){
+            next(e)
         }
     }
 })
