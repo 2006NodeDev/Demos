@@ -1,0 +1,12 @@
+:root {
+    --rev-main-color: #f26925
+}
+
+table {
+    border: 4px groove rgb(28,72,200)
+}
+
+.inner-table {
+    border: 2px groove var(--rev-main-color);
+    margin-right: 10px;
+}
