@@ -1,9 +1,15 @@
 import React, { FunctionComponent, useState } from 'react'
 import Button from '@material-ui/core/Button'
 import { TitleComponent } from '../TitleComponent/TitleComponent'
+import { User } from '../../models/User'
+import {Redirect} from 'react-router-dom'
 
 
-export const ClickerComponent: FunctionComponent<any> = (props) => {
+interface IClickerProps{
+    user:User|null
+}
+
+export const ClickerComponent: FunctionComponent<IClickerProps> = (props) => {
 
     const [clicks, changeClicks] = useState(0)// this is a function provided by react to allow us to keep track of data within the component
     //it returns 2 values, the first being the object that is state, 
@@ -12,10 +18,11 @@ export const ClickerComponent: FunctionComponent<any> = (props) => {
     // the value clicks is immutable, it can only be changed using the function we got alongside
 
     return (
+        (props.user) ?
         <div>
             {/* By taking a value from state and embbeding it into the display we are doing something we call data binding 
             fundamental property of react web design*/}
-            <TitleComponent size='small' title={`Welcome! you have ${clicks} number of clicks`} />
+            <TitleComponent size='small' title={`Welcome ${props.user.username}! you have ${clicks} number of clicks`} />
             {/* when handling an event we need to provide a callback function, not a function call
             if you weant to call a specific function with a specific value when an event takes place
             wrap that function call in an anonymous function
@@ -25,6 +32,8 @@ export const ClickerComponent: FunctionComponent<any> = (props) => {
                 Click
             </Button>
         </div>
+        :
+        <Redirect to='/login'/>
     )
 
 

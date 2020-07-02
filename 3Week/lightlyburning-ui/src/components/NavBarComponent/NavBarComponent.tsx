@@ -8,6 +8,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
+import {Link} from 'react-router-dom'
 
 //this is an example of Jss - a more js way of doing css
 const useStyles = makeStyles((theme: Theme) =>
@@ -51,10 +52,10 @@ export const NavBarComponent: FunctionComponent<any> = (props) => {
                         keepMounted
                         open={Boolean(anchorEl)}
                         onClose={handleClose}>
-                        <MenuItem onClick={handleClose}>Profile</MenuItem>
-                        <MenuItem onClick={handleClose}>My account</MenuItem>
-                        <MenuItem onClick={handleClose}>Logout</MenuItem>
-
+                        <MenuItem onClick={handleClose}><Link to='/clicker'>Clicker</Link></MenuItem>
+                        <MenuItem onClick={handleClose}><Link to='/first'>First</Link></MenuItem>
+                        <MenuItem onClick={handleClose}><Link to='/title'>Title</Link></MenuItem>
+                        <MenuItem onClick={handleClose}><Link to='/login'>Login</Link></MenuItem>
                     </Menu>
                     <Typography variant="h6" className={classes.title}>
                         LightlyBurning
