@@ -5,6 +5,7 @@ import { TitleComponent } from './components/TitleComponent/TitleComponent';
 import { FancyBorder } from './components/FancyBorderComponent/FancyBorderComponent';
 import { NavBarComponent } from './components/NavBarComponent/NavBarComponent';
 import { ClickerComponent } from './components/ClickerComponent/ClickerComponent';
+import { LoginComponent } from './components/LoginComponent/LoginComponent';
 
 // this is the first and highest component in the hierarchy 
 // the root level component
@@ -25,6 +26,7 @@ function App() {
         <TitleComponent title={'Now We are Cooking with Props'} size='large' />
         {/* title component is the "data" being held and displayed in the container component */}
       </FancyBorder>
+      <LoginComponent/>
     </div>
   );
 }

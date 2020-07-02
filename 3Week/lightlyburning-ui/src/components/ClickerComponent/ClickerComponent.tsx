@@ -11,7 +11,6 @@ export const ClickerComponent: FunctionComponent<any> = (props) => {
     //use state stakes in a single arguement, the initial state
     // the value clicks is immutable, it can only be changed using the function we got alongside
 
-
     return (
         <div>
             {/* By taking a value from state and embbeding it into the display we are doing something we call data binding 
