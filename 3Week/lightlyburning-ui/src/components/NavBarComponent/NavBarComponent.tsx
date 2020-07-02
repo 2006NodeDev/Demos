@@ -37,6 +37,21 @@ export const NavBarComponent: FunctionComponent<any> = (props) => {
     const handleClose = () => {
         setAnchorEl(null);
     };
+    //we can programmatically build the menu items
+    let menuItems = []
+    //always have the login item
+    menuItems.push(<MenuItem onClick={handleClose}><Link to='/login'>Login</Link></MenuItem>)
+    if(props.user){
+        //if they are logged in, add the other items
+        menuItems.push(<MenuItem onClick={handleClose}><Link to='/clicker'>Clicker</Link></MenuItem>,
+        <MenuItem onClick={handleClose}><Link to='/first'>First</Link></MenuItem>,
+        <MenuItem onClick={handleClose}><Link to='/title'>Title</Link></MenuItem>,
+        <MenuItem onClick={handleClose}><Link to={`/profile/${(props.user)?props.user.userId : '0' }`}>My Profile</Link></MenuItem>)
+    }
+    if(props.user && props.user.role === 'Admin'){
+        menuItems.push(<MenuItem onClick={handleClose}><Link to='/users'>All Users</Link></MenuItem>,)
+    }
+
 
     return (
         <nav>
@@ -52,10 +67,7 @@ export const NavBarComponent: FunctionComponent<any> = (props) => {
                         keepMounted
                         open={Boolean(anchorEl)}
                         onClose={handleClose}>
-                        <MenuItem onClick={handleClose}><Link to='/clicker'>Clicker</Link></MenuItem>
-                        <MenuItem onClick={handleClose}><Link to='/first'>First</Link></MenuItem>
-                        <MenuItem onClick={handleClose}><Link to='/title'>Title</Link></MenuItem>
-                        <MenuItem onClick={handleClose}><Link to='/login'>Login</Link></MenuItem>
+                        {menuItems}
                     </Menu>
                     <Typography variant="h6" className={classes.title}>
                         LightlyBurning

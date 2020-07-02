@@ -8,6 +8,9 @@ import { ClickerComponent } from './components/ClickerComponent/ClickerComponent
 import { LoginComponent } from './components/LoginComponent/LoginComponent';
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { User } from './models/User';
+import { UserDisplayComponent } from './components/UserDisplayComponent/UserDisplay';
+import { ProfileComponent } from './components/ProfileComponent/ProfileComponent';
+import { AllUsersComponent } from './components/AllUserComponent/AllUsersComponent';
 
 // this is the first and highest component in the hierarchy 
 // the root level component
@@ -20,7 +23,7 @@ function App() {
 
       <Router>
         {/* the router component has no display elements, its only purpose is to manage the data and functionality of routing */}
-        <NavBarComponent />
+        <NavBarComponent user={currentUser}/>
         {/* if the path in the route matches the path in the url of the browser
         render the component */}
         <Route path='/first'>
@@ -47,6 +50,8 @@ function App() {
         {/* with route we can use the component property to specify what should be rendered
          we get passed in as props, history, location and match, but we can't set any of our own props*/}
         <Route path='/login' render={(props)=>(<LoginComponent changeCurrentUser={changeCurrentUser} {...props} />)} />
+        <Route path='/profile/:userId' component={ProfileComponent}/>
+        <Route path='/users' component={AllUsersComponent}/>
       </Router>
 
     </div>
