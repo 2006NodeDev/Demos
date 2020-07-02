@@ -5,6 +5,7 @@ import { userRouter } from './routers/user-router'
 import { sessionMiddleware } from './middleware/session-middleware'
 import { BadCredentialsError } from './errors/BadCredentialsError'
 import { getUserByUsernameAndPassword } from './daos/user-dao'
+import { corsFilter } from './middleware/cors-filter'
 
 
 const app = express()//we call the express function
@@ -18,8 +19,11 @@ app.use(express.json())//this is an example of middle ware
 
 //our custom middleware that we ant to run on all requests
 app.use(loggingMiddleware)// we use use to match everything, no path to match all paths
+// make sure request is in allowed origins and types
+app.use(corsFilter)
 //middleware for tracking connections to our server
 app.use(sessionMiddleware)
+
 
 //app.use(authenticationMiddleware) this makes us unable to login oops!
 
@@ -35,7 +39,7 @@ app.post('/login', async (req:Request, res:Response, next:NextFunction)=>{
     // if I didn't get a usrname/password send an error and say give me both fields
     if(!username || !password){
         // make a custom http error and throw it or just send a res
-        throw new BadCredentialsError()
+        next( new BadCredentialsError())
     } else {
         try{
             let user = await getUserByUsernameAndPassword(username, password)

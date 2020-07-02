@@ -9,6 +9,7 @@ export const LoginComponent:FunctionComponent<any> = (props) => {
     //we need to keep track of a username and a password
     const [username, changeUsername] = useState('')// two bits of state from react
     const [password, changePassword] = useState('')// one for username, one for password
+    const [currentUser, changeCurrentUser] = useState(null)
 
     const updateUsername = (event:any) => {//callback for events
         event.preventDefault()//stop the default behaviour of the event
@@ -20,9 +21,10 @@ export const LoginComponent:FunctionComponent<any> = (props) => {
         changePassword(event.currentTarget.value)
     }
 
-    const loginSubmit = (e:SyntheticEvent) => {//sythentic events are react interface for converting between the many different types of browser events
+    const loginSubmit = async (e:SyntheticEvent) => {//sythentic events are react interface for converting between the many different types of browser events
         e.preventDefault()
-        lightlyburningLogin(username, password)
+        let res = await lightlyburningLogin(username, password)
+        changeCurrentUser(res)
         changePassword('')
     }
 
