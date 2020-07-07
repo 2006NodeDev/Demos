@@ -15,5 +15,6 @@ export const lightlyburningLogin = async (username:string, password:string) => {
     } catch(e){
         console.log(e);
         //should probably do something is we get an error
+        throw e
     }
 }

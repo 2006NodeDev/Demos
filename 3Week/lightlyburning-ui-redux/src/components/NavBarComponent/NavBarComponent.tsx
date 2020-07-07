@@ -9,6 +9,8 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import {Link} from 'react-router-dom'
+import { IState } from '../../reducers';
+import { useSelector } from 'react-redux';
 
 //this is an example of Jss - a more js way of doing css
 const useStyles = makeStyles((theme: Theme) =>
@@ -30,6 +32,11 @@ export const NavBarComponent: FunctionComponent<any> = (props) => {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
+
+    const currentUser = useSelector((state:IState)=>{
+        return state.loginState.currentUser
+    })
+
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
@@ -41,14 +48,14 @@ export const NavBarComponent: FunctionComponent<any> = (props) => {
     let menuItems = []
     //always have the login item
     menuItems.push(<MenuItem onClick={handleClose}><Link to='/login'>Login</Link></MenuItem>)
-    if(props.user){
+    if(currentUser){
         //if they are logged in, add the other items
         menuItems.push(<MenuItem onClick={handleClose}><Link to='/clicker'>Clicker</Link></MenuItem>,
         <MenuItem onClick={handleClose}><Link to='/first'>First</Link></MenuItem>,
         <MenuItem onClick={handleClose}><Link to='/title'>Title</Link></MenuItem>,
         <MenuItem onClick={handleClose}><Link to={`/profile/${(props.user)?props.user.userId : '0' }`}>My Profile</Link></MenuItem>)
     }
-    if(props.user && props.user.role === 'Admin'){
+    if(currentUser && currentUser.role === 'Admin'){
         menuItems.push(<MenuItem onClick={handleClose}><Link to='/users'>All Users</Link></MenuItem>,)
     }
 

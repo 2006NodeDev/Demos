@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
+import 'react-toastify/dist/ReactToastify.css';
 import { FirstComponent } from './components/FirstComponent/FirstComponent';
 import { TitleComponent } from './components/TitleComponent/TitleComponent';
 import { FancyBorder } from './components/FancyBorderComponent/FancyBorderComponent';
@@ -13,19 +14,20 @@ import { ProfileComponent } from './components/ProfileComponent/ProfileComponent
 import { AllUsersComponent } from './components/AllUserComponent/AllUsersComponent';
 import { Provider } from 'react-redux';
 import { store } from './store';
+import {ToastContainer} from 'react-toastify'
 
 // this is the first and highest component in the hierarchy 
 // the root level component
 // every other component we make we will put into APP somewhere ( if doing SPA )
 function App() {
-  const [currentUser, changeCurrentUser] = useState<null | User>(null)
   return (
     <div className="App">
-      {/* //this is the root level tag that allows us to do routing in the first place */}
+      
       <Provider store={store}>
+        {/* //this is the root level tag that allows us to do routing in the first place */}
         <Router>
           {/* the router component has no display elements, its only purpose is to manage the data and functionality of routing */}
-          <NavBarComponent user={currentUser} />
+          <NavBarComponent  />
           {/* if the path in the route matches the path in the url of the browser
         render the component */}
           <Route path='/first'>
@@ -37,7 +39,7 @@ function App() {
           <Route path='/clicker'>
             {/* With route, we can supply the component to render as a child */}
             <FancyBorder>
-              <ClickerComponent user={currentUser} />
+              <ClickerComponent />
             </FancyBorder>
           </Route>
           <Route path='/title' render={(props) => (
@@ -51,10 +53,11 @@ function App() {
             </FancyBorder>)} />
           {/* with route we can use the component property to specify what should be rendered
          we get passed in as props, history, location and match, but we can't set any of our own props*/}
-          <Route path='/login' render={(props) => (<LoginComponent changeCurrentUser={changeCurrentUser} {...props} />)} />
+          <Route path='/login' render={(props) => (<LoginComponent {...props} />)} />
           <Route path='/profile/:userId' component={ProfileComponent} />
           <Route path='/users' component={AllUsersComponent} />
         </Router>
+        <ToastContainer position='bottom-right'/>
       </Provider>
 
     </div>

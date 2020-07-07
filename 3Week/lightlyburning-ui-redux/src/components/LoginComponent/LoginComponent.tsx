@@ -1,20 +1,27 @@
-import React, { FunctionComponent, useState, SyntheticEvent } from 'react'
+import React, { FunctionComponent, useState, SyntheticEvent, useEffect } from 'react'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import { lightlyburningLogin } from '../../remote/lightlyburning-api/lightlyburning-login'
 import {RouteComponentProps} from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { lbLoginActionMapper, loginErrorReset } from '../../action-mappers/login-action-mapper'
+import { IState } from '../../reducers'
+import { toast } from 'react-toastify'
 
 //the interface called route component props just defines history match and location
-interface ILoginProps extends RouteComponentProps{
-    changeCurrentUser:(newUser:any)=>void
-}
 
-export const LoginComponent:FunctionComponent<ILoginProps> = (props) => {
+
+export const LoginComponent:FunctionComponent<any> = (props) => {
 
     //we need to keep track of a username and a password
     const [username, changeUsername] = useState('')// two bits of state from react
     const [password, changePassword] = useState('')// one for username, one for password
     // there used to be the user state here - now it is from props
+    const errorMessage = useSelector((state:IState)=>{
+        return state.loginState.errorMessage
+    })
+
+    const dispatch = useDispatch();
 
     const updateUsername = (event:any) => {//callback for events
         event.preventDefault()//stop the default behaviour of the event
@@ -28,11 +35,21 @@ export const LoginComponent:FunctionComponent<ILoginProps> = (props) => {
 
     const loginSubmit = async (e:SyntheticEvent) => {//sythentic events are react interface for converting between the many different types of browser events
         e.preventDefault()
-        let res = await lightlyburningLogin(username, password)
-        props.changeCurrentUser(res)
-        changePassword('')
-        props.history.push('/clicker')
+        //has to get the action for a login attempt - one of 4 different actions
+        //we get that action here and dispatch to the reducer
+        let thunk = lbLoginActionMapper(username,password)
+        dispatch(thunk)
+
     }
+
+    useEffect(()=>{
+        if(errorMessage){
+            toast.error(errorMessage)
+            //should reset the error message after we toast
+            dispatch(loginErrorReset())
+        }
+    })
+    
 
     return (
         <div>
