@@ -31,6 +31,12 @@ app.use('/books', bookRouter)// redirect all requests on /books to the router
 app.use('/users', userRouter)// redirect all requests on /users to the router
 
 
+app.get('/health', (req:Request,res:Response)=>{
+    res.sendStatus(200)
+})
+
+
+
 // an endpoint that unathenticated users can send credentials to to recieve authentication
 app.post('/login', async (req:Request, res:Response, next:NextFunction)=>{
     // you could use destructuring, see ./routers/book-router
