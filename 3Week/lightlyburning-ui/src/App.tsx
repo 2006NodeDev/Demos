@@ -11,6 +11,7 @@ import { User } from './models/User';
 import { UserDisplayComponent } from './components/UserDisplayComponent/UserDisplay';
 import { ProfileComponent } from './components/ProfileComponent/ProfileComponent';
 import { AllUsersComponent } from './components/AllUserComponent/AllUsersComponent';
+import { MakeUserComponent } from './components/MakeUserComponent/MakeUserComponent';
 
 // this is the first and highest component in the hierarchy 
 // the root level component
@@ -52,6 +53,7 @@ function App() {
         <Route path='/login' render={(props)=>(<LoginComponent changeCurrentUser={changeCurrentUser} {...props} />)} />
         <Route path='/profile/:userId' component={ProfileComponent}/>
         <Route path='/users' component={AllUsersComponent}/>
+        <Route path='/new' component={MakeUserComponent}/>
       </Router>
 
     </div>

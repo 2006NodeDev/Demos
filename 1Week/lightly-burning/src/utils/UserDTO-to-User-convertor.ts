@@ -7,6 +7,7 @@ export function UserDTOtoUserConvertor( udto:UserDTO):User{
         username: udto.username,
         password: udto.password,
         email: udto.email,
-        role: udto.role
+        role: udto.role,
+        image:udto.image
     }
 }

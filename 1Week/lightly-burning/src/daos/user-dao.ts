@@ -14,7 +14,7 @@ export async function getAllUsers():Promise<User[]> {
         //get a connection
         client = await connectionPool.connect()
         //send the query
-        let results = await client.query(`select u.user_id, u.username , u."password" , u.email ,r.role_id , r."role" from lightlyburning.users u left join lightlyburning.roles r on u."role" = r.role_id;`)
+        let results = await client.query(`select u.user_id, u.username , u."password" , u.email ,r.role_id , r."role", u."image" from lightlyburning.users u left join lightlyburning.roles r on u."role" = r.role_id;`)
         return results.rows.map(UserDTOtoUserConvertor)//return the rows
     } catch (e) {
         //if we get an error we don't know 
@@ -38,7 +38,8 @@ export async function getUserById(id: number):Promise<User> {
                 u."password" , 
                 u.email ,
                 r.role_id , 
-                r."role" 
+                r."role",
+                u."image"
                 from lightlyburning.users u left join lightlyburning.roles r on u."role" = r.role_id 
                 where u.user_id = $1;`,
             [id])// this is a parameterized query. In the query itself we use $1 to specify a parameter, then we fill in a value using an array as the second arg of the query function
@@ -74,7 +75,8 @@ export async function getUserByUsernameAndPassword(username:string, password:str
                 u."password" , 
                 u."email" ,
                 r."role_id" , 
-                r."role" 
+                r."role",
+                u."image" 
                 from lightlyburning.users u left join lightlyburning.roles r on u."role" = r.role_id 
                 where u."username" = $1 and u."password" = $2;`,
             [username, password])// this is a parameterized query. In the query itself we use $1 to specify a parameter, then we fill in a value using an array as the second arg of the query function
@@ -109,9 +111,9 @@ export async function saveOneUser(newUser:User):Promise<User>{
             throw new Error('Role Not Found')
         }
         roleId = roleId.rows[0].role_id
-        let results = await client.query(`insert into lightlyburning.users ("username", "password","email","role")
-                                            values($1,$2,$3,$4) returning "user_id" `,//allows you to return some values from the rows in an insert, update or delete
-                                            [newUser.username, newUser.password, newUser.email, roleId])
+        let results = await client.query(`insert into lightlyburning.users ("username", "password","email","role", "image")
+                                            values($1,$2,$3,$4,$5) returning "user_id" `,//allows you to return some values from the rows in an insert, update or delete
+                                            [newUser.username, newUser.password, newUser.email, roleId, newUser.image])
         newUser.userId = results.rows[0].user_id
         await client.query('COMMIT;')//ends transaction
         return newUser
