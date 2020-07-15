@@ -2,8 +2,8 @@
 
 import { PoolClient, QueryResult } from "pg";
 import { connectionPool } from ".";
-import { BookDTOtoBookConvertor } from "../utils/BookDTO-to-Book-converter";
-import { BookNotFoundError } from "../errors/BookNotFoundError";
+import { BookDTOtoBookConvertor } from "../../utils/BookDTO-to-Book-converter";
+import { BookNotFoundError } from "../../errors/BookNotFoundError";
 
 
 /*

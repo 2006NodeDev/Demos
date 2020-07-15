@@ -4,7 +4,7 @@ import { loggingMiddleware } from './middleware/logging-middleware'
 import { userRouter } from './routers/user-router'
 import { sessionMiddleware } from './middleware/session-middleware'
 import { BadCredentialsError } from './errors/BadCredentialsError'
-import { getUserByUsernameAndPassword } from './daos/user-dao'
+import { getUserByUsernameAndPassword } from './daos/SQL/user-dao'
 import { corsFilter } from './middleware/cors-filter'
 
 

@@ -49,7 +49,7 @@ userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
 //save new
 userRouter.post('/',  async (req: Request, res: Response, next: NextFunction) => {
     // get input from the user
-    let { username, password, email, role } = req.body//a little old fashioned destructuring
+    let { username, password, email, role, image } = req.body//a little old fashioned destructuring
     //verify that input
     if (!username || !password || !role) {
         next(new UserUserInputError)
@@ -61,6 +61,7 @@ userRouter.post('/',  async (req: Request, res: Response, next: NextFunction) =>
             role,
             userId: 0,
             email,
+            image,
         }
         newUser.email = email || null
         try {

@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express'
 import { BookUserInputError } from '../errors/BookUserInputError'
 import { BookIdInputError } from '../errors/BookIdInputError'
-import { getAllBooks, findbookById } from '../daos/book-dao'
+import { getAllBooks, findbookById } from '../daos/SQL/book-dao'
 
 // is like a sub division of the application itself
 export let bookRouter = express.Router()
