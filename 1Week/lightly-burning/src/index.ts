@@ -13,7 +13,8 @@ const app = express()//we call the express function
 
 // app .use matches every single http verb( get, post and delete and )
 // if I don't specify a path, thats the same as every path ( '/' )
-app.use(express.json())//this is an example of middle ware
+app.use(express.json({limit:'50mb'}))//this is an example of middle ware
+//increase the maximum size of a body we can parse
 // the idea of middle ware is to run requests through partial processing and let them move forward through our application
 //express.json is a function that takes in the request - turns the body into a js object - and then we let the request go to the next function that it matches
 

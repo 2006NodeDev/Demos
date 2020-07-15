@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
+import 'react-toastify/dist/ReactToastify.css';
 import { FirstComponent } from './components/FirstComponent/FirstComponent';
 import { TitleComponent } from './components/TitleComponent/TitleComponent';
 import { FancyBorder } from './components/FancyBorderComponent/FancyBorderComponent';
@@ -11,6 +12,8 @@ import { User } from './models/User';
 import { UserDisplayComponent } from './components/UserDisplayComponent/UserDisplay';
 import { ProfileComponent } from './components/ProfileComponent/ProfileComponent';
 import { AllUsersComponent } from './components/AllUserComponent/AllUsersComponent';
+import { NewUserComponent } from './components/NewUserComponent/NewUserComponent';
+import {ToastContainer} from 'react-toastify'
 
 // this is the first and highest component in the hierarchy 
 // the root level component
@@ -52,6 +55,8 @@ function App() {
         <Route path='/login' render={(props)=>(<LoginComponent changeCurrentUser={changeCurrentUser} {...props} />)} />
         <Route path='/profile/:userId' component={ProfileComponent}/>
         <Route path='/users' component={AllUsersComponent}/>
+        <Route path='/new' component={NewUserComponent}/>
+        <ToastContainer position='bottom-right'/>
       </Router>
 
     </div>
