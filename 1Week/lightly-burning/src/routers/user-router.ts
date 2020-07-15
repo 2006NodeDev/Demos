@@ -1,9 +1,10 @@
 import express, { Request, Response, NextFunction } from 'express'
 import { authenticationMiddleware } from '../middleware/authentication-middleware'
-import { getAllUsers, getUserById, saveOneUser } from '../daos/user-dao'
+import { getAllUsers, getUserById } from '../daos/user-dao'
 import { authorizationMiddleware } from '../middleware/authorization-middleware'
 import { UserUserInputError } from '../errors/UserUserInputError'
 import { User } from '../models/User'
+import { saveUserService } from '../services/user-service'
 // our base path is /users
 export const userRouter = express.Router()
 
@@ -46,7 +47,7 @@ userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
 })
 
 //save new
-userRouter.post('/', authorizationMiddleware(['Admin']), async (req: Request, res: Response, next: NextFunction) => {
+userRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     // get input from the user
     let { username, password, email, role } = req.body//a little old fashioned destructuring
     //verify that input
@@ -63,7 +64,7 @@ userRouter.post('/', authorizationMiddleware(['Admin']), async (req: Request, re
         }
         newUser.email = email || null
         try {
-            let savedUser = await saveOneUser(newUser)
+            let savedUser = await saveUserService(newUser)
             res.json(savedUser)// needs to have the updated userId
         } catch (e) {
             next(e)

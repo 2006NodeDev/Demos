@@ -6,10 +6,14 @@ import { sessionMiddleware } from './middleware/session-middleware'
 import { BadCredentialsError } from './errors/BadCredentialsError'
 import { getUserByUsernameAndPassword } from './daos/user-dao'
 import { corsFilter } from './middleware/cors-filter'
+import './gcp/pub-sub/pub-sub'
 
 
-const app = express()//we call the express function
+
+export const app = express()//we call the express function
 //we get a completed application
+
+
 
 // app .use matches every single http verb( get, post and delete and )
 // if I don't specify a path, thats the same as every path ( '/' )
