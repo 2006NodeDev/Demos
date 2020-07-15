@@ -49,32 +49,31 @@ export const NewUserComponent: FunctionComponent<any> = (props) => {
         e.preventDefault()
         if(password !== confirmPassword){
             toast.error('Password Do Not Match')
-        }
-
-        let newUser:User = {
-            role: 'User',
-            username,
-            password,
-            email,
-            userId:0,
-            image
-        }
-
-        let res = await lightlyburningSaveUser(newUser)
-
+        }else {
+            let newUser:User = {
+                role: 'User',
+                username,
+                password,
+                email,
+                userId:0,
+                image
+            }
+    
+            let res = await lightlyburningSaveUser(newUser)
+        }   
     }
 
 
     return (
         <div>
             <form onSubmit={submitUser}>
-                <TextField id="standard-basic" label="Username" value={username} onChange={updateUsername} />
+                <TextField id="standard-basic" label="Username" value={username || ''} onChange={updateUsername} />
                 <TextField id="standard-basic" type='password' label="password" value={password} onChange={updatePassword}/>
                 <TextField id="standard-basic" type='password' label="confirm password" value={confirmPassword} onChange={updateConfirmPassword}/>
                 <TextField id="standard-basic" type='email' label="email" value={email} onChange={updateEmail}/>
                 {/* figure out how to do role on your own, look at select component from material ui */}
                 <label htmlFor='file'>Profile Pic</label>
-                <input type='file' name='file' accept='image/*' onChange={updateImage}   />
+                <input type='file' name='file' accept='image/*' onChange={updateImage} />
                 <img src={image}/>
                 <Button variant="contained" type='submit'>Submit</Button>
             </form>

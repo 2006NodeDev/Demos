@@ -1,9 +1,10 @@
 import express, { Request, Response, NextFunction } from 'express'
 //import { authenticationMiddleware } from '../middleware/authentication-middleware'
-import { getAllUsers, getUserById, saveOneUser } from '../daos/user-dao'
+
 import { authorizationMiddleware } from '../middleware/authorization-middleware'
 import { UserUserInputError } from '../errors/UserUserInputError'
 import { User } from '../models/User'
+import { saveOneUserService, getUserByIDService, getAllUsersService } from '../services/user-service'
 // our base path is /users
 export const userRouter = express.Router()
 
@@ -21,7 +22,7 @@ userRouter.get('/', authorizationMiddleware(['Admin']), async (req: Request, res
     // can this function execute with only a promise?
     try {
         //lets try not being async and see what happens
-        let allUsers = await getAllUsers()//thinking in abstraction
+        let allUsers = await getAllUsersService()//thinking in abstraction
         res.json(allUsers)
     } catch (e) {
         next(e)
@@ -37,7 +38,7 @@ userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
         res.status(400).send('Id needs to be a number')// the error way is better because it scales easier, fewer places you have to change code if you want to refactor
     } else {
         try {
-            let user = await getUserById(+id)
+            let user = await getUserByIDService(+id)
             res.json(user)
         } catch (e) {
             next(e)
@@ -63,7 +64,7 @@ userRouter.post('/',  async (req: Request, res: Response, next: NextFunction) =>
         }
         newUser.email = email || null
         try {
-            let savedUser = await saveOneUser(newUser)
+            let savedUser = await saveOneUserService(newUser)
             res.json(savedUser)// needs to have the updated userId
         } catch (e) {
             next(e)
