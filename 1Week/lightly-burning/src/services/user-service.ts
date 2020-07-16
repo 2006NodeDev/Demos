@@ -2,6 +2,8 @@ import { getAllUsers, getUserById, saveOneUser } from "../daos/SQL/user-dao";
 import { User } from "../models/User";
 import { saveProfilePicture } from "../daos/Cloud-Storage/user-images";
 import { bucketBaseUrl } from "../daos/Cloud-Storage";
+import { expressEventEmitter, customExpressEvents } from "../event-listeners";
+
 
 
 
@@ -37,6 +39,9 @@ export async function saveOneUserService(newUser: User): Promise<User> {
        
         //we should probably make sure that username has no spaces in it or that we replace them with -
         await saveProfilePicture(contentType, imageBase64Data, `users/${newUser.username}/profile.${contentType}`)
+        //with event driven design after I completed the save a user process
+        //I send an event saying tis done with the relevent info
+        expressEventEmitter.emit(customExpressEvents.NEW_USER, newUser)
         return savedUser
     } catch (e) {
         console.log(e)
@@ -49,3 +54,5 @@ export async function saveOneUserService(newUser: User): Promise<User> {
 
 
 }
+
+

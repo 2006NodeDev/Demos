@@ -6,6 +6,10 @@ import { sessionMiddleware } from './middleware/session-middleware'
 import { BadCredentialsError } from './errors/BadCredentialsError'
 import { getUserByUsernameAndPassword } from './daos/SQL/user-dao'
 import { corsFilter } from './middleware/cors-filter'
+import { userTopic } from './messaging/index'
+import './event-listeners/new-user'
+
+console.log(userTopic)
 
 
 const app = express()//we call the express function
