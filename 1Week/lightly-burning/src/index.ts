@@ -2,12 +2,13 @@ import express, { Request, Response, NextFunction } from 'express'
 import { bookRouter } from './routers/book-router'
 import { loggingMiddleware } from './middleware/logging-middleware'
 import { userRouter } from './routers/user-router'
-import { sessionMiddleware } from './middleware/session-middleware'
 import { BadCredentialsError } from './errors/BadCredentialsError'
 import { getUserByUsernameAndPassword } from './daos/SQL/user-dao'
 import { corsFilter } from './middleware/cors-filter'
 import { userTopic } from './messaging/index'
 import './event-listeners/new-user'
+import jwt from 'jsonwebtoken'
+import { JWTVerifyMiddleware } from './middleware/jwt-verify-middleware'
 
 console.log(userTopic)
 
@@ -27,7 +28,7 @@ app.use(loggingMiddleware)// we use use to match everything, no path to match al
 // make sure request is in allowed origins and types
 app.use(corsFilter)
 //middleware for tracking connections to our server
-app.use(sessionMiddleware)
+app.use(JWTVerifyMiddleware)
 
 
 //app.use(authenticationMiddleware) this makes us unable to login oops!
@@ -54,7 +55,9 @@ app.post('/login', async (req:Request, res:Response, next:NextFunction)=>{
     } else {
         try{
             let user = await getUserByUsernameAndPassword(username, password)
-            req.session.user = user// need to remeber to add their user data to the session
+            //instead of setting session, build and send back a jwt
+            let token = jwt.sign(user, 'thisIsASecret', {expiresIn: '1h'})
+            res.header('Authorization', `Bearer ${token}`)
             // so we can use that data in other requests
             res.json(user)
         }catch(e){

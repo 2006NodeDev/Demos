@@ -4,7 +4,7 @@ export let lbBaseUrl:string
 if(process.env['NODE_ENV'] === 'production'){
     //if we ran npm run build
     //use the deployed address
-    lbBaseUrl = 'http://node-service.js-army.com'
+    lbBaseUrl = 'https://node-service.js-army.com'
 }else {
     //we are in test or dev, use the local address
     lbBaseUrl = 'http://localhost:2006'

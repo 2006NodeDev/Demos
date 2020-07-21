@@ -7,7 +7,6 @@ import { lbBaseUrl } from '../../environment'
 export const lightlyburningClient = axios.create({
     baseURL:lbBaseUrl,
     headers:{
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
     },
-    withCredentials:true
 })

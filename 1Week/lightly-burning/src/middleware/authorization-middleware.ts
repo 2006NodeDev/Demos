@@ -3,15 +3,15 @@
 // different endpoints require different roles
 //before I allow someone to access an endpoint, I want to make sure they have a role that matches that endpoints allowed roles
 
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
 
 // utilize the factory pattern, we provide an array of accepted roles, and return a function that allows those roles through
 // this function is a middleware factory
 export function authorizationMiddleware(roles:string[]){// build a middleware function
-    return (req:Request, res:Response, next:NextFunction) => {
+    return (req:any, res:Response, next:NextFunction) => {
         let allowed = false
         for(const role of roles){
-            if(req.session.user.role === role){
+            if(req.user.role === role){//we probably want to look for something else now because session will no longer exist
                 //we found a matching role, allow them in
                 allowed = true
                 next()
