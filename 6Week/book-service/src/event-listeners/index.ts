@@ -9,5 +9,4 @@ export const expressEventEmitter = new EventEmitter()
 
 //definitions for custom events ( mostly so we don't mistype them)
 export const customExpressEvents = {
-    NEW_USER: 'NEW_USER'
 }

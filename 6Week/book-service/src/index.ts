@@ -1,16 +1,10 @@
-import express, { Request, Response, NextFunction } from 'express'
+import express, { Request, Response } from 'express'
 import { bookRouter } from './routers/book-router'
 import { loggingMiddleware } from './middleware/logging-middleware'
-import { userRouter } from './routers/user-router'
-import { BadCredentialsError } from './errors/BadCredentialsError'
-import { getUserByUsernameAndPassword } from './daos/SQL/user-dao'
 import { corsFilter } from './middleware/cors-filter'
-import { userTopic } from './messaging/index'
-import './event-listeners/new-user'
-import jwt from 'jsonwebtoken'
 import { JWTVerifyMiddleware } from './middleware/jwt-verify-middleware'
 
-console.log(userTopic)
+
 
 
 const app = express()//we call the express function
@@ -34,39 +28,11 @@ app.use(JWTVerifyMiddleware)
 //app.use(authenticationMiddleware) this makes us unable to login oops!
 
 app.use('/books', bookRouter)// redirect all requests on /books to the router
-app.use('/users', userRouter)// redirect all requests on /users to the router
 
 
 app.get('/health', (req:Request,res:Response)=>{
     res.sendStatus(200)
 })
-
-
-
-// an endpoint that unathenticated users can send credentials to to recieve authentication
-app.post('/login', async (req:Request, res:Response, next:NextFunction)=>{
-    // you could use destructuring, see ./routers/book-router
-    let username = req.body.username
-    let password = req.body.password
-    // if I didn't get a usrname/password send an error and say give me both fields
-    if(!username || !password){
-        // make a custom http error and throw it or just send a res
-        next( new BadCredentialsError())
-    } else {
-        try{
-            let user = await getUserByUsernameAndPassword(username, password)
-            //instead of setting session, build and send back a jwt
-            let token = jwt.sign(user, 'thisIsASecret', {expiresIn: '1h'})//THE SECRET should be in an env var
-            res.header('Authorization', `Bearer ${token}`)
-            // so we can use that data in other requests
-            res.json(user)
-        }catch(e){
-            next(e)
-        }
-    }
-})
-
-
 
 
 
