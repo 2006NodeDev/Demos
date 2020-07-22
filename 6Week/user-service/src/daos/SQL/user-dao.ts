@@ -6,6 +6,9 @@ import { User } from "../../models/User";
 import { AuthFailureError} from '../../errors/AuthFailureError'
 import { UserUserInputError } from "../../errors/UserUserInputError";
 
+const schema = process.env['LB_SCHEMA'] || 'lightlyburning_user_service'
+
+
 
 export async function getAllUsers():Promise<User[]> {
     //first thing is declare a client
@@ -14,7 +17,7 @@ export async function getAllUsers():Promise<User[]> {
         //get a connection
         client = await connectionPool.connect()
         //send the query
-        let results = await client.query(`select u.user_id, u.username , u."password" , u.email ,r.role_id , r."role", u."image" from lightlyburning.users u left join lightlyburning.roles r on u."role" = r.role_id;`)
+        let results = await client.query(`select u.user_id, u.username , u."password" , u.email ,r.role_id , r."role", u."image" from ${schema}.users u left join ${schema}.roles r on u."role" = r.role_id;`)
         return results.rows.map(UserDTOtoUserConvertor)//return the rows
     } catch (e) {
         //if we get an error we don't know 
@@ -40,7 +43,7 @@ export async function getUserById(id: number):Promise<User> {
                 r.role_id , 
                 r."role",
                 u."image" 
-                from lightlyburning.users u left join lightlyburning.roles r on u."role" = r.role_id 
+                from ${schema}.users u left join ${schema}.roles r on u."role" = r.role_id 
                 where u.user_id = $1;`,
             [id])// this is a parameterized query. In the query itself we use $1 to specify a parameter, then we fill in a value using an array as the second arg of the query function
                 // pg library automatically sanitizes input for these params
@@ -77,7 +80,7 @@ export async function getUserByUsernameAndPassword(username:string, password:str
                 r."role_id" , 
                 r."role",
                 u."image" 
-                from lightlyburning.users u left join lightlyburning.roles r on u."role" = r.role_id 
+                from ${schema}.users u left join ${schema}.roles r on u."role" = r.role_id 
                 where u."username" = $1 and u."password" = $2;`,
             [username, password])// this is a parameterized query. In the query itself we use $1 to specify a parameter, then we fill in a value using an array as the second arg of the query function
                 // pg library automatically sanitizes input for these params
@@ -106,12 +109,12 @@ export async function saveOneUser(newUser:User):Promise<User>{
         client = await connectionPool.connect()
         //if you have multiple querys, you should make a transaction
         await client.query('BEGIN;')//start a transaction
-        let roleId = await client.query(`select r."role_id" from lightlyburning.roles r where r."role" = $1`, [newUser.role])
+        let roleId = await client.query(`select r."role_id" from ${schema}.roles r where r."role" = $1`, [newUser.role])
         if(roleId.rowCount === 0){
             throw new Error('Role Not Found')
         }
         roleId = roleId.rows[0].role_id
-        let results = await client.query(`insert into lightlyburning.users ("username", "password","email","role", "image")
+        let results = await client.query(`insert into ${schema}.users ("username", "password","email","role", "image")
                                             values($1,$2,$3,$4,$5) returning "user_id" `,//allows you to return some values from the rows in an insert, update or delete
                                             [newUser.username, newUser.password, newUser.email, roleId, newUser.image])
         newUser.userId = results.rows[0].user_id
