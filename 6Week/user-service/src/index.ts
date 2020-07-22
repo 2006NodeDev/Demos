@@ -1,5 +1,4 @@
 import express, { Request, Response, NextFunction } from 'express'
-import { bookRouter } from './routers/book-router'
 import { loggingMiddleware } from './middleware/logging-middleware'
 import { userRouter } from './routers/user-router'
 import { BadCredentialsError } from './errors/BadCredentialsError'
@@ -33,7 +32,7 @@ app.use(JWTVerifyMiddleware)
 
 //app.use(authenticationMiddleware) this makes us unable to login oops!
 
-app.use('/books', bookRouter)// redirect all requests on /books to the router
+
 app.use('/users', userRouter)// redirect all requests on /users to the router
 
 

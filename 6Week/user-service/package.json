@@ -1,5 +1,5 @@
 {
-  "name": "lightlyburning",
+  "name": "lightlyburning-user-service",
   "version": "1.0.0",
   "description": "Def not amazon kindle",
   "main": "src/index.ts",
