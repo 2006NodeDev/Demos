@@ -7,5 +7,5 @@ if(process.env['NODE_ENV'] === 'production'){
     lbBaseUrl = 'https://node-service.js-army.com'
 }else {
     //we are in test or dev, use the local address
-    lbBaseUrl = 'http://localhost:2006'
+    lbBaseUrl = 'http://localhost:80/user-service'
 }

@@ -4,12 +4,10 @@ import { userRouter } from './routers/user-router'
 import { BadCredentialsError } from './errors/BadCredentialsError'
 import { getUserByUsernameAndPassword } from './daos/SQL/user-dao'
 import { corsFilter } from './middleware/cors-filter'
-import { userTopic } from './messaging/index'
 import './event-listeners/new-user'
 import jwt from 'jsonwebtoken'
 import { JWTVerifyMiddleware } from './middleware/jwt-verify-middleware'
 
-console.log(userTopic)
 
 
 const app = express()//we call the express function
