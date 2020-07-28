@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: lb-user-service
-        image: gcr.io/tenacious-text-279818/lb-user-service
+        image: gcr.io/tenacious-text-279818/lb-user-service:COMMIT_SHA
         imagePullPolicy: Always
         env:
         - name: LB_HOST
