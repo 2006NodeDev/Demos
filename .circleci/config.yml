@@ -4,7 +4,7 @@ orbs:
 jobs:
   build-user-service:
     docker:
-    - image: circleci/node:12.18.3
+    - image: circleci/node:12.18.2
     steps:
       - checkout
       - node/with-cache:
