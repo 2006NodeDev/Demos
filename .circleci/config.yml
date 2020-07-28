@@ -1,0 +1,32 @@
+version: 2.1
+orbs:
+  slack: circleci/slack@3.4.2
+jobs:
+  build-user-service:
+    docker:
+    - image: circleci/node:12.18.2
+    steps:
+      - checkout
+      - run: 
+          working_directory: ~/project/6Week/user-service
+          name: Install
+          command: |
+            npm install
+      - run: 
+          working_directory: ~/project/6Week/user-service
+          name: Test
+          command: |
+            npm test
+      - run: 
+          working_directory: ~/project/6Week/user-service
+          name: Build
+          command: |
+            npm run build
+      - slack/status:
+          mentions: 'CHANNEL'
+          success_message: 'Code is Ready for you to pull'
+          failure_message: 'You should probably tell Alec that the code failed'
+workflows:
+    build-and-test:
+      jobs:
+        - build-user-service
