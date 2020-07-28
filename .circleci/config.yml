@@ -23,7 +23,7 @@ jobs:
           command: |
             npm run build
       - slack/status:
-          mentions: '015D7M1LSV'
+          mentions: 'CHANNEL'
           success_message: 'Code is Ready for you to pull'
           failure_message: 'You should probably tell Alec that the code failed'
 workflows:
