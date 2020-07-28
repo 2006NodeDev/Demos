@@ -9,6 +9,7 @@ jobs:
           working_directory: ~/Demos/6Week/user-service
           name: Install
           command: |
+            pwd
             npm install
       - run: 
           working_directory: ~/Demos/6Week/user-service
