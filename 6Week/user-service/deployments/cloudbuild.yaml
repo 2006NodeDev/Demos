@@ -54,10 +54,10 @@ steps:
     args:
     - '-c'
     - |
-    gcloud source repos clone lb-user-service-manifets && \
-    cd lb-user-service-manifets && \
-    git checkout candidate && \
-    git config user.email $(gcloud auth list --filter=status:ACTIVE --format='value(account)')
+      gcloud source repos clone lb-user-service-manifets && \
+      cd lb-user-service-manifets && \
+      git checkout candidate && \
+      git config user.email $(gcloud auth list --filter=status:ACTIVE --format='value(account)')
 
 # This step generates the new manifest
   - name: 'gcr.io/cloud-builders/gcloud'
@@ -66,8 +66,8 @@ steps:
     args:
     - '-c'
     - |
-     cd 6Week/user-service
-     sed "s/COMMIT_SHA/${SHORT_SHA}/g" lb-user-service-deployment.yaml.tpl > ../../lb-user-service-manifets/deployment.yaml
+      cd 6Week/user-service
+      sed "s/COMMIT_SHA/${SHORT_SHA}/g" lb-user-service-deployment.yaml.tpl > ../../lb-user-service-manifets/deployment.yaml
 
 # This step pushes the manifest back to hello-cloudbuild-env
   - name: 'gcr.io/cloud-builders/gcloud'
@@ -76,10 +76,10 @@ steps:
     args:
     - '-c'
     - |
-    set -x && \
-    cd lb-user-service-manifets && \
-    git add deployment.yaml && \
-    git commit -m "Deploying image gcr.io/${PROJECT_ID}/lb-user-service:${SHORT_SHA}
-    Built from commit ${COMMIT_SHA} of repository lb-user-service
-    Author: $(git log --format='%an <%ae>' -n 1 HEAD)" && \
-    git push origin candidate
+      set -x && \
+      cd lb-user-service-manifets && \
+      git add deployment.yaml && \
+      git commit -m "Deploying image gcr.io/${PROJECT_ID}/lb-user-service:${SHORT_SHA}
+      Built from commit ${COMMIT_SHA} of repository lb-user-service
+      Author: $(git log --format='%an <%ae>' -n 1 HEAD)" && \
+      git push origin candidate
