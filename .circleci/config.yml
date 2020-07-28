@@ -1,4 +1,6 @@
 version: 2.1
+orbs:
+  slack: circleci/slack@3.4.2
 jobs:
   build-user-service:
     docker:
@@ -20,6 +22,10 @@ jobs:
           name: Build
           command: |
             npm run build
+      - slack/status:
+        mentions: '015D7M1LSV'
+        success_message: 'Code is Ready for you to pull'
+        failure_message: 'You should probably tell Alec that the code failed'
 workflows:
     build-and-test:
       jobs:

@@ -1,9 +1,7 @@
 
 const mockRequest = ()=>{
     return {
-        session:{
-            user:undefined
-        }
+        user:undefined
     }
 }
 
@@ -41,7 +39,7 @@ describe('authenticationMiddleware', ()=>{
     })
 
     it('Should allow through someone who is logged in', ()=>{
-        req.session.user = {//set up the user object
+        req.user = {//set up the user object
             username:'alec',
             role:'admin'
         }
