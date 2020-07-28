@@ -66,8 +66,8 @@ steps:
     args:
     - '-c'
     - |
-      cd 6Week/user-service
-      sed "s/COMMIT_SHA/${SHORT_SHA}/g" lb-user-service-deployment.yaml.tpl > ../../lb-user-service-manifets/deployment.yaml
+      cd 6Week/user-service/deployments
+      sed "s/COMMIT_SHA/${SHORT_SHA}/g" lb-user-service-deployment.yaml.tpl > ../../../lb-user-service-manifets/deployment.yaml
 
 # This step pushes the manifest back to hello-cloudbuild-env
   - name: 'gcr.io/cloud-builders/gcloud'
