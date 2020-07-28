@@ -6,20 +6,20 @@ jobs:
     steps:
       - checkout
       - run: 
-        working_directory: ~/6Week/user-service
-        name: Install
-        command: |
-          npm install
+          working_directory: ~/6Week/user-service
+          name: Install
+          command: |
+            npm install
       - run: 
-        working_directory: ~/6Week/user-service
-        name: Test
-        command: |
-          npm test
+          working_directory: ~/6Week/user-service
+          name: Test
+          command: |
+            npm test
       - run: 
-        working_directory: ~/6Week/user-service
-        name: Build
-        command: |
-          npm run build
+          working_directory: ~/6Week/user-service
+          name: Build
+          command: |
+            npm run build
 workflows:
     build-and-test:
       jobs:
