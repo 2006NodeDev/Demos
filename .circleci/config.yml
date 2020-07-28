@@ -6,18 +6,17 @@ jobs:
     steps:
       - checkout
       - run: 
+          working_directory: ~/project/6Week/user-service
           name: Install
           command: |
-            pwd
-            ls
             npm install
       - run: 
-          working_directory: ~/project/Demos/6Week/user-service
+          working_directory: ~/project/6Week/user-service
           name: Test
           command: |
             npm test
       - run: 
-          working_directory: ~/project/Demos/6Week/user-service
+          working_directory: ~/project/6Week/user-service
           name: Build
           command: |
             npm run build
