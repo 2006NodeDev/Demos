@@ -1,3 +1,4 @@
+drop schema if exists lightlyburning_book_service cascade;
 create schema lightlyburning_book_service;
 set schema 'lightlyburning_book_service';
 
@@ -15,9 +16,6 @@ create table books (
 	"ISBN" int not null
 );
 
-
-
-select * from books;
 
 create table genre(
 	"genre_id" serial primary key,
@@ -45,6 +43,13 @@ create table books_genre(
 	"book_id" int references books ("book_id"),
 	"genre_id" int references genre ("genre_id"),
 	primary key ("book_id", "genre_id")
+);
+
+create table browsing_history(
+	"book_id" int references books ("book_id"),
+	"user_id" int not null,
+	"time_viewed" timestamp default now(),
+	primary key ("book_id", "user_id")
 );
 
 
@@ -77,3 +82,6 @@ insert into books_genre
 
 
 select * from books b natural join books_authors ba natural join authors a;
+
+
+select bh.book_id from browsing_history bh where bh.user_id in $1 order by bh.time_viewed desc;
