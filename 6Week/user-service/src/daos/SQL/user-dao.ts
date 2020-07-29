@@ -5,6 +5,7 @@ import { UserNotFoundError } from "../../errors/UserNotFoundError";
 import { User } from "../../models/User";
 import { AuthFailureError} from '../../errors/AuthFailureError'
 import { UserUserInputError } from "../../errors/UserUserInputError";
+import { logger, errorLogger } from "../../utils/loggers";
 
 const schema = process.env['LB_SCHEMA'] || 'lightlyburning_user_service'
 
@@ -21,7 +22,8 @@ export async function getAllUsers():Promise<User[]> {
         return results.rows.map(UserDTOtoUserConvertor)//return the rows
     } catch (e) {
         //if we get an error we don't know 
-        console.log(e)
+        logger.error(e)
+        errorLogger.error(e)
         throw new Error('Unhandled Error Occured')
     } finally {
         //let the connectiopn go back to the pool
@@ -56,7 +58,8 @@ export async function getUserById(id: number):Promise<User> {
             throw new UserNotFoundError()
         }
         //if we get an error we don't know 
-        console.log(e)
+        logger.error(e)
+        errorLogger.error(e)
         throw new Error('Unhandled Error Occured')
     } finally {
         //let the connectiopn go back to the pool
@@ -93,7 +96,8 @@ export async function getUserByUsernameAndPassword(username:string, password:str
             throw new AuthFailureError()
         }
         //if we get an error we don't know 
-        console.log(e)
+        logger.error(e)
+        errorLogger.error(e)
         throw new Error('Unhandled Error Occured')
     } finally {
         //let the connectiopn go back to the pool
@@ -127,7 +131,8 @@ export async function saveOneUser(newUser:User):Promise<User>{
             throw new UserUserInputError()// role not found error
         }
         //if we get an error we don't know 
-        console.log(e)
+        logger.error(e)
+        errorLogger.error(e)
         throw new Error('Unhandled Error Occured')
     }finally{
         client && client.release();

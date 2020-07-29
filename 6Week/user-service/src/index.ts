@@ -7,6 +7,7 @@ import { corsFilter } from './middleware/cors-filter'
 import './event-listeners/new-user'
 import jwt from 'jsonwebtoken'
 import { JWTVerifyMiddleware } from './middleware/jwt-verify-middleware'
+import { logger, errorLogger } from './utils/loggers'
 
 // base path, something like /user-service
 const basePath = process.env['LB_BASE_PATH'] || ''//use / if there is no other base path provided
@@ -76,15 +77,24 @@ app.use((err, req, res, next) => {
     //if it is one of our custom errors
     if (err.statusCode) {
         // use the status code and the message for the response
+        logger.debug(err)
         res.status(err.statusCode).send(err.message)
     } else {
         // if it wasnt one of our custom errors
-        console.log(err)//log it out for us to debug
+        logger.error(err)//log it out for us to debug
+        errorLogger.error(err)
         //send a generic error response
         res.status(500).send('Oops, Something went wrong')
     }
 })
 
 app.listen(2006, () => {
-    console.log('Server has started');
+    logger.info('Server has started');
+})
+
+// if there is an uncaught error, write out a fatal log, then close the program
+process.on('uncaughtException', err => {
+    logger.fatal(`Uncaught Exception: ${err.message} ${err.stack}`)
+    errorLogger.fatal(`Uncaught Exception: ${err.message} ${err.stack}`)
+    process.exit(1)
 })

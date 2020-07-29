@@ -3,6 +3,7 @@ import { User } from "../models/User";
 import { saveProfilePicture } from "../daos/Cloud-Storage/user-images";
 import { bucketBaseUrl } from "../daos/Cloud-Storage";
 import { expressEventEmitter, customExpressEvents } from "../event-listeners";
+import { logger, errorLogger } from "../utils/loggers";
 
 
 
@@ -44,7 +45,8 @@ export async function saveOneUserService(newUser: User): Promise<User> {
         expressEventEmitter.emit(customExpressEvents.NEW_USER, newUser)
         return savedUser
     } catch (e) {
-        console.log(e)
+        logger.error(e)
+        errorLogger.error(e)
         throw e
     }
 

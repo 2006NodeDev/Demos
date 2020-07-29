@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction } from 'express'
-//import { authenticationMiddleware } from '../middleware/authentication-middleware'
+import { authenticationMiddleware } from '../middleware/authentication-middleware'
 
 import { authorizationMiddleware } from '../middleware/authorization-middleware'
 import { UserUserInputError } from '../errors/UserUserInputError'
@@ -9,7 +9,7 @@ import { saveOneUserService, getUserByIDService, getAllUsersService } from '../s
 export const userRouter = express.Router()
 
 // this applies this middleware to the entire router beneath it
-//userRouter.use(authenticationMiddleware)
+userRouter.use(authenticationMiddleware)
 
 
 // Get all
