@@ -13,7 +13,10 @@ expressEventEmitter.on(customExpressEvents.NEW_USER, (newUser:User)=>{
     //allows us to resolve the contained function asynchronously
     setImmediate(async ()=>{
         try{
-            let res = await userTopic.publishJSON(newUser)
+            let res = await userTopic.publishJSON({
+                type:'newUser',
+                payload:newUser
+            })
             logger.debug(`pub sub message id is ${res}`);//returns message id
         }catch(e){
             logger.error(e)

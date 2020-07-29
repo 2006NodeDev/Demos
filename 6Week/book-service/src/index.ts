@@ -3,6 +3,9 @@ import { bookRouter } from './routers/book-router'
 import { loggingMiddleware } from './middleware/logging-middleware'
 import { corsFilter } from './middleware/cors-filter'
 import { JWTVerifyMiddleware } from './middleware/jwt-verify-middleware'
+import { browserHistoryRouter } from './routers/browsing-history-router'
+import './messaging/index'
+import './messaging/user-service-event-listeners'
 
 
 
@@ -29,6 +32,7 @@ app.use(JWTVerifyMiddleware)
 
 app.use('/books', bookRouter)// redirect all requests on /books to the router
 
+app.use('/browser-history', browserHistoryRouter)
 
 app.get('/health', (req:Request,res:Response)=>{
     res.sendStatus(200)

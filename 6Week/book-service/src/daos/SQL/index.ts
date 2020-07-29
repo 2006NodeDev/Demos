@@ -12,3 +12,5 @@ export const connectionPool:Pool = new Pool({
     port:5432,// the database's port
     max:5//maximum number of connections
 })
+
+export const schema = process.env['LB_SCHEMA'] || 'lightlyburning_book_service'

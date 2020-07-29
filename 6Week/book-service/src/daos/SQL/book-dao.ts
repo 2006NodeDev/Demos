@@ -1,11 +1,11 @@
 // this is going to contain all the functions that interact wit hthe book table
 
 import { PoolClient, QueryResult } from "pg";
-import { connectionPool } from ".";
+import { connectionPool, schema } from ".";
 import { BookDTOtoBookConvertor } from "../../utils/BookDTO-to-Book-converter";
 import { BookNotFoundError } from "../../errors/BookNotFoundError";
 
-const schema = process.env['LB_SCHEMA'] || 'lightlyburning_book_service'
+
 
 
 /*
@@ -71,3 +71,33 @@ export async function findbookById(id:number) {
 }
 
 
+export async function findbooksByIdSet(ids:number[]) {
+    let client: PoolClient;
+    try{
+        //id = '1 or 1 = 1; drop table l${schema}.books cascade; select * from l${schema}.book '
+        client = await connectionPool.connect()
+        let results: QueryResult = await client.query(`select b.book_id, b."pages", b.chapters, b."ISBN" ,b.series , b.number_in_series , b.publisher , b.publishing_date , b.title, array_agg(distinct (a.author)) as authors, array_agg(distinct (g.genre)) as genres 
+        from ${schema}.books b 
+        natural join ${schema}.books_authors ba 
+        natural join ${schema}.authors a
+        natural join ${schema}.books_genre bg
+        natural join ${schema}.genre g
+        where b.book_id = ANY($1::int[])
+        group by b.book_id;`, [ids])//directly inputting user values is very dangerous
+        //sql injction which is very bad, we will learn how to fix with a parameterized query
+        if(results.rowCount === 0){
+            throw new Error('NotFound')
+        }else{
+            return results.rows.map(BookDTOtoBookConvertor)
+        }
+    }catch(e){
+        //some real error handling
+        if(e.message === 'NotFound'){
+            throw new BookNotFoundError()
+        }
+        console.log(e)
+        throw new Error('un-implemented error handling')
+    }finally{
+        client && client.release()
+    }
+}
