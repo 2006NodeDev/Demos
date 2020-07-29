@@ -29,6 +29,8 @@ spec:
           value: "lb-micro"
         - name: LB_USER
           value: "postgres"
+        - name: LB_BASE_PATH
+          value: "/user-service"
         - name: LB_PASSWORD
           valueFrom:
             secretKeyRef:

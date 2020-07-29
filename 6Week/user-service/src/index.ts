@@ -8,7 +8,8 @@ import './event-listeners/new-user'
 import jwt from 'jsonwebtoken'
 import { JWTVerifyMiddleware } from './middleware/jwt-verify-middleware'
 
-
+// base path, something like /user-service
+const basePath = process.env['LB_BASE_PATH'] || ''//use / if there is no other base path provided
 
 const app = express()//we call the express function
 //we get a completed application
@@ -27,21 +28,24 @@ app.use(corsFilter)
 //middleware for tracking connections to our server
 app.use(JWTVerifyMiddleware)
 
+const basePathRouter = express.Router()
+
+app.use(basePath, basePathRouter)
 
 //app.use(authenticationMiddleware) this makes us unable to login oops!
 
 
-app.use('/users', userRouter)// redirect all requests on /users to the router
+basePathRouter.use('/users', userRouter)// redirect all requests on /users to the router
 
 
-app.get('/health', (req:Request,res:Response)=>{
+basePathRouter.get('/health', (req:Request,res:Response)=>{
     res.sendStatus(200)
 })
 
 
 
 // an endpoint that unathenticated users can send credentials to to recieve authentication
-app.post('/login', async (req:Request, res:Response, next:NextFunction)=>{
+basePathRouter.post('/login', async (req:Request, res:Response, next:NextFunction)=>{
     // you could use destructuring, see ./routers/book-router
     let username = req.body.username
     let password = req.body.password
