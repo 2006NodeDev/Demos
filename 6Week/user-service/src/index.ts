@@ -37,8 +37,8 @@ app.use(basePath, basePathRouter)
 
 basePathRouter.use('/users', userRouter)// redirect all requests on /users to the router
 
-
-basePathRouter.get('/health', (req:Request,res:Response)=>{
+//probably safe, this will be inaccessible to traffic that comes through ingress
+app.get('/health', (req:Request,res:Response)=>{
     res.sendStatus(200)
 })
 
