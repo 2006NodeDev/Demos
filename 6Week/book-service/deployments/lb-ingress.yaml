@@ -2,6 +2,7 @@ apiVersion: networking.k8s.io/v1beta1 # for versions before 1.14 use extensions/
 kind: Ingress
 metadata:
   name: lb-ingress
+  namespace: lb-demos
 spec:
   rules:
   - http:

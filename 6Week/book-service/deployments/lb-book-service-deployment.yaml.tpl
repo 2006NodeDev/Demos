@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: lb-book-service-deployment
+  namespace: lb-demos
   labels: 
     app: lb
     service: book-service
