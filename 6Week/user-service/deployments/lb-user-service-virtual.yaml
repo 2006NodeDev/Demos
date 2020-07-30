@@ -1,0 +1,19 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: lb-user-service-virtual
+  namespace: lb-demos
+spec:
+  gateways:
+  - lb-gateway
+  hosts:
+  - "*" # interpreted as reviews.foo.svc.cluster.local
+  http:
+  - match:
+    - uri:
+        prefix: /user-service
+    route:
+    - destination:
+        port:
+          number: 2006
+        host: lb-user-service-service # interpreted as reviews.foo.svc.cluster.local

@@ -1,0 +1,22 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: cloud-sql
+  namespace: lb-demos
+spec:
+  hosts:
+  - cloud-sql.com
+  addresses:
+  - 10.58.96.3/32
+  ports:
+  - number: 80
+    name: http
+    protocol: HTTP
+  - number: 5432
+    name: postgresql
+    protocol: TCP
+  resolution: NONE
+  location: MESH_EXTERNAL
+  workloadSelector:
+    labels:
+      app: lb

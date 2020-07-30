@@ -1,0 +1,17 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: kiali-service-virtual
+  namespace: istio-system
+spec:
+  gateways:
+  - lb-demos/lb-gateway
+  hosts:
+  - "*" # interpreted as reviews.foo.svc.cluster.local
+  http:
+  - match:
+    - uri:
+        prefix: /kiali
+    route:
+    - destination:
+        host: kiali # interpreted as reviews.foo.svc.cluster.local

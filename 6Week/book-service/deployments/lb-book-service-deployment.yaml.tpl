@@ -33,7 +33,7 @@ spec:
         - name: LB_BASE_PATH
           value: "/book-service"
         - name: LB_USER_SERVICE_HOST
-          value: "http://lb-user-service-service"
+          value: "http://lb-user-service-service:2006/user-service"
         - name: LB_PASSWORD
           valueFrom:
             secretKeyRef:

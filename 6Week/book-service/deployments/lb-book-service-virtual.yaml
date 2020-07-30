@@ -1,0 +1,19 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: lb-book-service-virtual
+  namespace: lb-demos
+spec:
+  gateways:
+  - lb-gateway
+  hosts:
+  - "*" # from header of requests for allowed to send in, can be internal or external
+  http:
+  - match:
+    - uri:
+        prefix: /book-service # path matching also, rewrite exists for changing prefixes
+    route:
+    - destination:
+        port:
+          number: 2006
+        host: lb-book-service-service # the dns look up for where to send the traffic ( probably an internal service)
