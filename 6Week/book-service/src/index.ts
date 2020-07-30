@@ -8,7 +8,7 @@ import './messaging/index'
 import './messaging/user-service-event-listeners'
 
 
-
+const basePath = process.env['LB_BASE_PATH'] || ''
 
 const app = express()//we call the express function
 //we get a completed application
@@ -28,11 +28,15 @@ app.use(corsFilter)
 app.use(JWTVerifyMiddleware)
 
 
+const basePathRouter = express.Router()
+
+app.use(basePath, basePathRouter)
+
 //app.use(authenticationMiddleware) this makes us unable to login oops!
 
-app.use('/books', bookRouter)// redirect all requests on /books to the router
+basePathRouter.use('/books', bookRouter)// redirect all requests on /books to the router
 
-app.use('/browser-history', browserHistoryRouter)
+basePathRouter.use('/browser-history', browserHistoryRouter)
 
 app.get('/health', (req:Request,res:Response)=>{
     res.sendStatus(200)
