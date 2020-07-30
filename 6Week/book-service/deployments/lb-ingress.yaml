@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1beta1 # for versions before 1.14 use extensions/v1beta1
+kind: Ingress
+metadata:
+  name: lb-ingress
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /user-service/*
+        backend:
+          serviceName: lb-user-service-service
+          servicePort: 2006
+      - path: /book-service/*
+        backend:
+          serviceName: lb-book-service-service
+          servicePort: 2006
